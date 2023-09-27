@@ -1,11 +1,9 @@
-
-import './App.css'
-import ButtonAppBar from './components/navbar/navbar'
+// import ButtonAppBar from './components/navbar/navbar'
 import {Dashboard}  from './pages/dashboard/dashboard'
 const App = () => {
   return (
     <div className="App">
-      <ButtonAppBar/>
+      {/*<ButtonAppBar/>*/}
       <Dashboard/>
       {/* Other components and content */}
     </div>

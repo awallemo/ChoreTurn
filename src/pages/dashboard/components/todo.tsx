@@ -1,39 +1,49 @@
-import { Accordion, AccordionSummary, AccordionDetails, IconButton } from "@mui/material"
-import DeleteIcon from '@mui/icons-material/Delete';
+import {Card, CardBody, CardFooter, CardHeader, Heading, Text, IconButton, Box} from "@chakra-ui/react";
+import {Delete} from "@mui/icons-material";
+import {useContext} from "react";
+import {TodoContext} from "../../../contexts/todoContext.ts";
 
 export const TodoItem = (
-    {   title,
-        description,
-        deleteFn
+    {   id,
+        title,
+        content,
+        created,
       }:
-        {   title: string,
-            description: string,
-            deleteFn: () => void
+        {   id: number,
+            title: string,
+            content: string,
+            created?: Date
         }
 ) => {
+    const {todos, setTodos} = useContext(TodoContext)
+    const deleteTodoFromDb = async (id: number) => {
+        console.log("DELTE ID", id)
+        await fetch(`http://127.0.0.1:8090/api/collections/Todos/records/${id}`,
+            {
+                method: 'delete'
+            }
+        )
+        const updatedTodos = todos?.filter(todo => todo.id !== id);
+        updatedTodos && setTodos(updatedTodos);
+    }
 
-    return (
-        <Accordion
-            sx={{
-                // maxWidth: '300px',
-                // marginBottom: '10px',
-            }}>
-            <AccordionSummary sx={{
-                display: 'flex',
-                justifyContent: 'space-between', // Align items to the start and end
-                alignItems: 'center', // Vertically center items
-            }}>
-                {/* This is the clickable header of the accordion */}
-                {title}
-                <IconButton aria-label="delete" onClick={deleteFn}>
-                    <DeleteIcon />
-                </IconButton>
-            </AccordionSummary>
-            
-            <AccordionDetails>
-                {/* This is the content that will be shown/hidden */}
-                {description}
-            </AccordionDetails>
-        </Accordion>
+
+    return(
+        <Box sx={{ maxWidth: "250px", padding:"10px"}}>
+        <Card >
+            <CardHeader>
+                <Heading as='h4' size='md' sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}</Heading>
+            </CardHeader>
+            <CardBody sx={{}}>
+                <Text>{content}</Text>
+            </CardBody>
+
+            <CardFooter sx={{justifyContent: "space-between"}}>
+                {created && <Text fontSize={"10px"} fontFamily={"cursive"}>Created: {created.toLocaleString()}</Text>}
+                <IconButton aria-label={"Delete"} icon={<Delete/>} onClick={() => deleteTodoFromDb(id)}></IconButton>
+                {/*<Text fontSize={"10px"} fontFamily={"bold"}>{user}</Text>*/}
+            </CardFooter>
+        </Card>
+        </Box>
     )
 }
