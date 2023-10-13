@@ -1,7 +1,7 @@
 import {Card, CardBody, CardFooter, CardHeader, Heading, Text, IconButton, Box} from "@chakra-ui/react";
 import {Delete} from "@mui/icons-material";
 import {useContext} from "react";
-import {TodoContext} from "../../../contexts/todoContext.ts";
+import {DashboardContext} from "../../../contexts/dashboardContext.ts";
 
 export const TodoItem = (
     {   id,
@@ -15,7 +15,7 @@ export const TodoItem = (
             created?: Date
         }
 ) => {
-    const {todos, setTodos} = useContext(TodoContext)
+    const {todos, setTodos} = useContext(DashboardContext)
     const deleteTodoFromDb = async (id: number) => {
         console.log("DELTE ID", id)
         await fetch(`http://127.0.0.1:8090/api/collections/Todos/records/${id}`,
@@ -27,7 +27,7 @@ export const TodoItem = (
         updatedTodos && setTodos(updatedTodos);
     }
 
-
+    console.log("todo id", id)
     return(
         <Box sx={{ maxWidth: "250px", padding:"10px"}}>
         <Card >

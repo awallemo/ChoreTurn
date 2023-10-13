@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import {useContext} from "react"
 import { TodoItem } from "./todo"
-import {TodoContext} from "../../../contexts/todoContext.ts";
+import {DashboardContext} from "../../../contexts/dashboardContext.ts";
 
 //TODO: Hent ut todos fra db og send tittel, description og assignee
 const DashboardContainer = styled.div`
@@ -20,7 +20,7 @@ const TodoContainer = styled.div`
 
 export const Todolist = () => {
 
-    const {todos} = useContext(TodoContext)
+    const {todos} = useContext(DashboardContext)
 
 
 return (
