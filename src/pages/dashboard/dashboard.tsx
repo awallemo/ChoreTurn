@@ -25,7 +25,6 @@ export const Dashboard = () => {
             response => response.json()
         ).then(
             data => {
-                console.log("DATA directly from pocketbase with useEffect", data)
                 setTodos(data.items)
             }
         )
@@ -34,7 +33,6 @@ export const Dashboard = () => {
             response => response.json()
         ).then(
             data => {
-                console.log("DATA directly from pocketbase with useEffect", data)
                 setUsers(data.items)
             }
         )

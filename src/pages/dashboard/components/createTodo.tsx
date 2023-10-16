@@ -1,9 +1,8 @@
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {Textarea, Input, Box, Button, Select} from '@chakra-ui/react'
 import {Todo} from "../../../models/todoModel.ts";
 import {DashboardContext} from "../../../contexts/dashboardContext.ts";
 import styled from "styled-components";
-import {User} from "../../../models/userModel.ts";
 
 const FormContainer = styled.div`
   max-width: 300px; 
@@ -52,28 +51,12 @@ export const CreateTodo = () => {
                     title: title,
                     description: description,
                     created: new Date(),
-                    AssignedUser: users?.find((u) => u.name === user)?.id
+                    assignedUser: users?.find((u) => u.name === user)?.id
                 }
             )
         })
         console.log(users?.find((u) => u.name === user)?.id)
         todos && setTodos([...todos, {title: title, description: description, created: new Date()} as Todo]);
-
-        await fetch('http://127.0.0.1:8090/api/collections/Users/records/',{
-            method: 'PATCH',
-            headers: {
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    name: user,
-                    assignedTodos: todos?.find((t) => t.title === title)?.id //Har ikke fått id enda så er undefined her. Utforsk tanken med å kjøre en useEffect som trigges av den andre await fetchen kanskje?
-                }
-            )
-        })
-        console.log(user)
-        console.log(title)
-        console.log(todos?.find((todo) => todo.title === title))
     }
 
     return (
@@ -91,6 +74,7 @@ export const CreateTodo = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 isInvalid={error}
+                sx={{marginTop: "5px"}}
             />
             <Textarea
                 placeholder="Content"
@@ -98,15 +82,26 @@ export const CreateTodo = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 isInvalid={error}
                 size='sm'
+                sx={{marginTop: "5px"}}
             />
             {error && <p>{errorMessage}</p>}
 
-            <Select placeholder='Select option' value={user} onChange = {(e) => setUser(e.target.value)}>
+            <Select
+                placeholder='Select option'
+                value={user}
+                onChange = {(e) => setUser(e.target.value)}
+                sx={{marginTop: "5px"}}
+            >
                 {users?.map((user: any, index: number)=> {
                     return <option key={index} value={user.name} >{user.name}</option>
                 })}
             </Select>
-            <Button colorScheme='teal' size='sm' onClick={() => addTodo()}>
+            <Button
+                colorScheme='teal'
+                size='sm'
+                onClick={() => addTodo()}
+                sx={{marginTop: "10px"}}
+            >
                 Create note
             </Button>
         </FormContainer>

@@ -21,13 +21,13 @@ const TodoContainer = styled.div`
 export const Todolist = () => {
 
     const {todos} = useContext(DashboardContext)
-
+    console.log({todos})
 
 return (
     <DashboardContainer>
         <TodoContainer>
-            {todos?.map(todo => (
-                <TodoItem key={todo.id} id={todo.id} title={todo.title} content={todo.description} created={todo.created} />
+            {todos?.map((todo) => (
+                <TodoItem key={todo.id} todoProp={todo}  />
             ))}
         </TodoContainer>
     </DashboardContainer>

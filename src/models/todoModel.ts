@@ -3,6 +3,7 @@ export type Todo = {
     title: string;
     description: string;
     status?: string;
-    created?: Date;
+    created: Date;
     updatedAt?: Date;
+    assignedUser: number
     };

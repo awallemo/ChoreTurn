@@ -2,20 +2,16 @@ import {Card, CardBody, CardFooter, CardHeader, Heading, Text, IconButton, Box} 
 import {Delete} from "@mui/icons-material";
 import {useContext} from "react";
 import {DashboardContext} from "../../../contexts/dashboardContext.ts";
+import {Todo} from "../../../models/todoModel.ts";
 
-export const TodoItem = (
-    {   id,
-        title,
-        content,
-        created,
-      }:
-        {   id: number,
-            title: string,
-            content: string,
-            created?: Date
-        }
-) => {
-    const {todos, setTodos} = useContext(DashboardContext)
+export const TodoItem = ({ todoProp }: { todoProp: Todo }) => {
+
+    const { id, title, description, created, assignedUser } = todoProp
+    const { todos, setTodos } = useContext(DashboardContext)
+    const { users } = useContext(DashboardContext)
+
+    const userName = users?.find((u) => u.id === assignedUser)?.name
+
     const deleteTodoFromDb = async (id: number) => {
         console.log("DELTE ID", id)
         await fetch(`http://127.0.0.1:8090/api/collections/Todos/records/${id}`,
@@ -27,19 +23,19 @@ export const TodoItem = (
         updatedTodos && setTodos(updatedTodos);
     }
 
-    console.log("todo id", id)
     return(
         <Box sx={{ maxWidth: "250px", padding:"10px"}}>
         <Card >
-            <CardHeader>
+            <CardHeader sx={{textAlign: "center"}}>
                 <Heading as='h4' size='md' sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}</Heading>
             </CardHeader>
-            <CardBody sx={{}}>
-                <Text>{content}</Text>
+            <CardBody sx={{textAlign: "center"}}>
+                <Text>{description}</Text>
             </CardBody>
 
-            <CardFooter sx={{justifyContent: "space-between"}}>
-                {created && <Text fontSize={"10px"} fontFamily={"cursive"}>Created: {created.toLocaleString()}</Text>}
+            <CardFooter sx={{display: "block", textAlign: "center"}}>
+                <Text fontSize={"13px"} >Assigned to: {userName}</Text>
+                <Text fontSize={"10px"} fontFamily={"cursive"}>Created at: {created.toLocaleString()}</Text>
                 <IconButton aria-label={"Delete"} icon={<Delete/>} onClick={() => deleteTodoFromDb(id)}></IconButton>
                 {/*<Text fontSize={"10px"} fontFamily={"bold"}>{user}</Text>*/}
             </CardFooter>
